@@ -2,7 +2,7 @@
 Helper file for helper module :p
 """
 
-import re
+import re, os
 from datetime import datetime
 
 P1_TEMPLATE = """from aoc.utils import *
@@ -43,3 +43,9 @@ def parse_date(date: str) -> tuple[int, int]:
         day = days[0]
         year = datetime.now().year
     return day, year
+
+
+def rewrite_file(path: str, template: str, force: bool) -> None:
+    if not os.path.exists(path) or force:
+        with open(path, "w") as file:
+            file.write(template)
