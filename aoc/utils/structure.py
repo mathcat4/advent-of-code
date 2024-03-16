@@ -1,5 +1,5 @@
 """
-Helper file for helper module :p
+Helper file for the helper module :p
 """
 
 import re, os

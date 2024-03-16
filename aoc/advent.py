@@ -3,27 +3,27 @@ Handles commands and file structures.
 """
 
 import argparse
-from pathlib import Path
-from datetime import datetime
 from aoc.utils import structure
 import os
-import re
 
 argparser = argparse.ArgumentParser(
     prog="aoc", description="Helper commands for Advent of Code"
 )
 subparser = argparser.add_subparsers(title="subcommands", dest="subcommands")
 
-start_parser = subparser.add_parser("start", help="Create template file for AOC")
+start_parser = subparser.add_parser("start", help="Create template files for AOC")
 start_parser.add_argument("day", nargs="?", type=int, help="Day to start")
 start_parser.add_argument("year", nargs="?", type=int, help="Year to start")
 start_parser.add_argument(
     "-f", "--force", action="store_true", help="Force rewrite files"
 )
+start_parser.add_argument(
+    "-n", "--no-fetch", action="store_true", help="Don't fetch input file"
+)
 
-fetch_parser = subparser.add_parser("fetch", help="Fetch AOC input")
-fetch_parser.add_argument("day", nargs="?", type=int, help="Day to fetch")
-fetch_parser.add_argument("year", nargs="?", type=int, help="Year to fetch")
+run_parser = subparser.add_parser("run", help="Run AOC file")
+run_parser.add_argument("day", nargs="?", type=int, help="Day to run")
+run_parser.add_argument("year", nargs="?", type=int, help="Year to run")
 
 args = argparser.parse_args()
 
@@ -31,7 +31,6 @@ args = argparser.parse_args()
 if args.subcommands == "start":
     day, year = structure.parse_date(args.day, args.year)
 
-    # Create template files
     path = f"aoc/{year}/{day:02d}"
     os.makedirs(path, exist_ok=True)
 
@@ -45,9 +44,9 @@ if args.subcommands == "start":
 
     structure.rewrite_file(os.path.join(path, "test.txt"), "", args.force)
 
-    structure.rewrite_file(os.path.join(path, "inp.txt"), "", args.force)
+    aoc_input = "input"
+    structure.rewrite_file(os.path.join(path, "inp.txt"), aoc_input, not args.no_fetch)
 
-## Command "fetch"
-
-
-print("Hi!")
+## Command "run"
+if args.subcommands == "run":
+    print("run")
