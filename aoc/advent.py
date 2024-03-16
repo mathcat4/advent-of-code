@@ -14,20 +14,22 @@ argparser = argparse.ArgumentParser(
 )
 subparser = argparser.add_subparsers(title="subcommands", dest="subcommands")
 
-start_parser = subparser.add_parser("start", help="create template file for aoc")
-start_parser.add_argument("date", help="date in format d[day]y[year, optional]")
+start_parser = subparser.add_parser("start", help="Create template file for AOC")
+start_parser.add_argument("day", nargs="?", type=int, help="Day to start")
+start_parser.add_argument("year", nargs="?", type=int, help="Year to start")
 start_parser.add_argument(
-    "--force", action="store_true", help="force rewrite program files"
+    "-f", "--force", action="store_true", help="Force rewrite files"
 )
 
-fetch_parser = subparser.add_parser("fetch", help="fetch aoc input")
-fetch_parser.add_argument("date", help="date in format d[day]y[year, optional]")
+fetch_parser = subparser.add_parser("fetch", help="Fetch AOC input")
+fetch_parser.add_argument("day", nargs="?", type=int, help="Day to fetch")
+fetch_parser.add_argument("year", nargs="?", type=int, help="Year to fetch")
 
 args = argparser.parse_args()
 
 ## Command "start"
 if args.subcommands == "start":
-    day, year = structure.parse_date(args.date)
+    day, year = structure.parse_date(args.day, args.year)
 
     # Create template files
     path = f"aoc/{year}/{day:02d}"
