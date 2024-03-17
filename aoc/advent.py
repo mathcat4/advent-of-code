@@ -4,7 +4,10 @@ Handles commands and file structures.
 
 import argparse
 from aoc.utils import structure
+from dotenv import load_dotenv
 import os
+
+load_dotenv()
 
 argparser = argparse.ArgumentParser(
     prog="aoc", description="Helper commands for Advent of Code"
@@ -35,17 +38,24 @@ if args.subcommands == "start":
     os.makedirs(path, exist_ok=True)
 
     structure.rewrite_file(
-        os.path.join(path, "part1.py"), structure.P1_TEMPLATE, args.force
+        os.path.join(path, "part1.py"),
+        structure.create_template(day, year, 1),
+        args.force,
     )
 
     structure.rewrite_file(
-        os.path.join(path, "part2.py"), structure.P2_TEMPLATE, args.force
+        os.path.join(path, "part2.py"),
+        structure.create_template(day, year, 2),
+        args.force,
     )
 
     structure.rewrite_file(os.path.join(path, "test.txt"), "", args.force)
 
-    aoc_input = "input"
-    structure.rewrite_file(os.path.join(path, "inp.txt"), aoc_input, not args.no_fetch)
+    structure.rewrite_file(
+        os.path.join(path, "inp.txt"),
+        structure.fetch_input(day, year),
+        not args.no_fetch,
+    )
 
 ## Command "run"
 if args.subcommands == "run":

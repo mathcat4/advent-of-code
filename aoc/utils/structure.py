@@ -2,16 +2,22 @@
 Helper file for the helper module :p
 """
 
-import re, os
+import os
 from datetime import datetime
+import requests
 
-P1_TEMPLATE = """from aoc.utils import *
 
-"""
-
-P2_TEMPLATE = """from aoc.utils import *
-
-"""
+def create_template(day: int, year: int, part: int) -> str:
+    template = (
+        f'"""Day {day}, {year}, Part {part}"""\n'
+        "\n"
+        "from aoc.utils import *\n"
+        "\n"
+        "def main(inp):\n"
+        "    return inp\n"
+        "\n"
+    )
+    return template
 
 
 def parse_date(day: int, year: int) -> tuple[int, int]:
@@ -21,7 +27,7 @@ def parse_date(day: int, year: int) -> tuple[int, int]:
     if (
         year
         and year not in range(2015, datetime.now().year)
-        or (day and day not in range(1, 32))
+        or (day and day not in range(1, 26))
     ):
         raise ValueError("Argument doesn't meet day/year restrictions")
 
@@ -37,3 +43,15 @@ def rewrite_file(path: str, template: str, force: bool) -> None:
     if not os.path.exists(path) or force:
         with open(path, "w") as file:
             file.write(template)
+
+
+def fetch_input(day: int, year: int) -> str:
+    session = os.environ.get("SESSION")
+    response = requests.get(
+        f"https://adventofcode.com/{year}/day/{day}/input", cookies={"session": session}
+    )
+    if not response.ok:
+        raise RuntimeError(
+            f"Request failed, code: {response.status_code}, message: {response.content}"
+        )
+    return response.text

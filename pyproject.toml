@@ -2,12 +2,14 @@
 name = "aoc"
 version = "0.1.0"
 description = "A robust helper module for Advent of Code."
-authors = [{name="mathcat4", email="mathcatcgcc@gmail.com"}]
+authors = ["mathcat4 <mathcatcgcc@gmail.com>"]
 license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
+python-dotenv = "^1.0.1"
+requests = "^2.31.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.2.0"
