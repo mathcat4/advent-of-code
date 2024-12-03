@@ -4,6 +4,7 @@ Helper file for the helper module :p
 
 import os
 from datetime import datetime
+from importlib import import_module
 import requests
 
 
@@ -26,7 +27,7 @@ def parse_date(day: int, year: int) -> tuple[int, int]:
     """
     if (
         year
-        and year not in range(2015, datetime.now().year)
+        and year not in range(2015, datetime.now().year + 1)
         or (day and day not in range(1, 26))
     ):
         raise ValueError("Argument doesn't meet day/year restrictions")
@@ -55,3 +56,15 @@ def fetch_input(day: int, year: int) -> str:
             f"Request failed, code: {response.status_code}, message: {response.content}"
         )
     return response.text
+
+
+def run(part: int, day: int, year: int, real: bool = True):
+    if real:
+        module = import_module(f"aoc.{year}.{day:02d}.part{part}")
+        out = module.main(open(f"aoc/{year}/{day:02d}/inp.txt").read().strip())
+        print(f"\033[1;31m{out}\033[0m")
+    else:
+        module = import_module(f"aoc.{year}.{day:02d}.part{part}")
+        out = module.main(open(f"aoc/{year}/{day:02d}/test.txt").read().strip())
+
+        print(f"\033[1;31m{out}\033[0m")

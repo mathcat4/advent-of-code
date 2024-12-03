@@ -39,7 +39,55 @@ UPRIGHT = NORTHEAST = V(-1, 1)
 UPLEFT = NORTHWEST = V(-1, -1)
 DOWNRIGHT = SOUTHEAST = V(1, 1)
 DOWNLEFT = SOUTHWEST = V(1, -1)
-START = V(0, 0)
+NULL = START = V(0, 0)
+
+
+# Grid
+class Grid:
+    def __init__(self, grid):
+        self.grid = grid
+        self.h = len(grid)
+        self.w = len(grid[0])
+
+    def __getitem__(self, v):
+        return self.grid[v.r][v.c]
+
+    def __str__(self):
+        return "\n".join([" ".join(r) for r in self.grid])
+
+    def find(self, item):
+        if not isinstance(item, list):
+            item = [item]
+        inds = []
+        for i, r in enumerate(self.grid):
+            for j, c in enumerate(r):
+                if c in item:
+                    inds.append(V(i, j))
+        return inds
+
+    def legal(self, ind):
+        return True if 0 <= ind.r < self.h and 0 <= ind.c < self.w else False
+
+    def filter_legal(self, inds):
+        return [ind for ind in inds if self.legal(ind)]
+
+
+def adjs(v):
+    return [v + UP, v + DOWN, v + LEFT, v + RIGHT]
+
+
+def nbrs(v):
+    return [
+        v + UP,
+        v + UPRIGHT,
+        v + RIGHT,
+        v + DOWNRIGHT,
+        v + DOWN,
+        v + DOWNLEFT,
+        v + LEFT,
+        v + UPLEFT,
+    ]
+
 
 # Structures
 

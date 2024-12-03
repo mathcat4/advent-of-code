@@ -20,13 +20,18 @@ start_parser.add_argument("year", nargs="?", type=int, help="Year to start")
 start_parser.add_argument(
     "-f", "--force", action="store_true", help="Force rewrite files"
 )
-start_parser.add_argument(
-    "-n", "--no-fetch", action="store_true", help="Don't fetch input file"
-)
 
-run_parser = subparser.add_parser("run", help="Run AOC file")
+fetch_parser = subparser.add_parser("fetch", help="Fetch AOC input")
+fetch_parser.add_argument("day", nargs="?", type=int, help="Day to fetch")
+fetch_parser.add_argument("year", nargs="?", type=int, help="Year to fetch")
+
+run_parser = subparser.add_parser("run", help="Run AOC")
+run_parser.add_argument("part", nargs="?", type=int, help="Part to run")
 run_parser.add_argument("day", nargs="?", type=int, help="Day to run")
 run_parser.add_argument("year", nargs="?", type=int, help="Year to run")
+run_parser.add_argument(
+    "-r", "--real", action="store_true", help="Use real input instead of test input"
+)
 
 args = argparser.parse_args()
 
@@ -50,13 +55,21 @@ if args.subcommands == "start":
     )
 
     structure.rewrite_file(os.path.join(path, "test.txt"), "", args.force)
+    structure.rewrite_file(os.path.join(path, "inp.txt"), "", args.force)
+
+## Command "fetch"
+if args.subcommands == "fetch":
+    day, year = structure.parse_date(args.day, args.year)
 
     structure.rewrite_file(
-        os.path.join(path, "inp.txt"),
-        structure.fetch_input(day, year),
-        not args.no_fetch,
+        f"aoc/{year}/{day:02d}/inp.txt", structure.fetch_input(day, year), True
     )
 
 ## Command "run"
 if args.subcommands == "run":
-    print("run")
+    day, year = structure.parse_date(args.day, args.year)
+    (
+        structure.run(2, day, year, real=args.real)
+        if args.part == 2
+        else structure.run(1, day, year, real=args.real)
+    )

@@ -2,6 +2,7 @@
 
 from aoc.utils import *
 
-def main(inp):
-    return inp
 
+def main(inp):
+    d = [[a for a in l if a.isdigit()] for l in inp.split("\n")]
+    return sum([int(a[0] + a[-1]) for a in d])
